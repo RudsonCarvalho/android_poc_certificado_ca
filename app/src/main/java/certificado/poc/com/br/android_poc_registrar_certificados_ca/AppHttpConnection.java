@@ -48,7 +48,7 @@ public class AppHttpConnection {
                 throw new ExceptionInInitializerError("Erro nao foi inicializado uma url de servico valida.");
             }
 
-            if (URLUtil.isNetworkUrl(endPointUrl)) {
+            if (!URLUtil.isNetworkUrl(endPointUrl)) {
                 throw new ExceptionInInitializerError("Nao eh uma url valida ".concat(endPointUrl));
             }
 
