@@ -48,7 +48,7 @@ public class AppHttpConnection {
                 throw new ExceptionInInitializerError("Erro nao foi inicializado uma url de servico valida.");
             }
 
-            if (URLUtil.isValidUrl(endPointUrl)) {
+            if (URLUtil.isNetworkUrl(endPointUrl)) {
                 throw new ExceptionInInitializerError("Nao eh uma url valida ".concat(endPointUrl));
             }
 
@@ -82,13 +82,13 @@ public class AppHttpConnection {
                         }
 
                         // gera a keystore para o certificado confiavel
-                        String keyStoreType = KeyStore.getDefaultType();
+                        final String keyStoreType = KeyStore.getDefaultType();
                         KeyStore keyStore = KeyStore.getInstance(keyStoreType);
                         keyStore.load(null, null);
                         keyStore.setCertificateEntry(CERT_ENTRY, ca);
 
                         // cria uma trustmanager para o CA na keystore gerada
-                        String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+                        final String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
                         TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
                         tmf.init(keyStore);
 
