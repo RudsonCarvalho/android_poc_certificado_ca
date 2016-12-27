@@ -18,6 +18,7 @@ import java.security.cert.CertificateFactory;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 /**
@@ -53,7 +54,7 @@ public class AppHttpConnection {
 
             try {
 
-                openSSLContext(endPointUrl);
+                openSSLContext(endPointUrl, null);
 
             } catch (Exception e) {
 
@@ -91,7 +92,7 @@ public class AppHttpConnection {
                         TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
                         tmf.init(keyStore);
 
-                        openSSLContext(endPointUrl);
+                        openSSLContext(endPointUrl, tmf.getTrustManagers());
 
                     } else {
 
@@ -111,18 +112,19 @@ public class AppHttpConnection {
         /**
          * Tenta realizar uma conexao para inicializar o contexto de seguranca
          * @param endPointUrl
+         * @param trustManager
          * @throws IOException
          * @throws NoSuchAlgorithmException
          * @throws KeyManagementException
          */
-        private void openSSLContext(final String endPointUrl) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+        private void openSSLContext(final String endPointUrl, TrustManager[] trustManager) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 
             URL url = new URL(endPointUrl);
             URLConnection urlConnection = url.openConnection();
 
             //SSL TLS CONTEXT - secure socket protocol implementation
             sslContext = SSLContext.getInstance(PROTOCOL_TLS);
-            sslContext.init(null, null, null);
+            sslContext.init(null, trustManager, null);
 
             ((HttpsURLConnection) urlConnection).setSSLSocketFactory(sslContext.getSocketFactory());
 
