@@ -119,23 +119,29 @@ public class AppHttpConnection {
          */
         private void openSSLContext(final String endPointUrl, TrustManager[] trustManager) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 
-            URL url = new URL(endPointUrl);
-            URLConnection urlConnection = url.openConnection();
+            if (URLUtil.isHttpsUrl(endPointUrl)) {
 
-            //SSL TLS CONTEXT - secure socket protocol implementation
-            sslContext = SSLContext.getInstance(PROTOCOL_TLS);
-            sslContext.init(null, trustManager, null);
+                URL url = new URL(endPointUrl);
+                URLConnection urlConnection = url.openConnection();
 
-            ((HttpsURLConnection) urlConnection).setSSLSocketFactory(sslContext.getSocketFactory());
+                if (!(urlConnection instanceof HttpsURLConnection)) {
 
-            //tenta conectar
-            urlConnection.connect();
+                    //SSL TLS CONTEXT - secure socket protocol implementation
+                    sslContext = SSLContext.getInstance(PROTOCOL_TLS);
+                    sslContext.init(null, trustManager, null);
 
-            // CAs instalados ok
-            ((HttpsURLConnection) urlConnection).disconnect();
+                    ((HttpsURLConnection) urlConnection).setSSLSocketFactory(sslContext.getSocketFactory());
 
-            url = null;
-            urlConnection = null;
+                    //tenta conectar
+                    urlConnection.connect();
+
+                    // CAs instalados ok
+                    ((HttpsURLConnection) urlConnection).disconnect();
+
+                    url = null;
+                    urlConnection = null;
+                }
+            }
         }
 
 
