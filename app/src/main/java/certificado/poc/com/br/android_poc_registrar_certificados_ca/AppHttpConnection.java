@@ -23,6 +23,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 /**
  * Created by Rudson Kiyoshi Souza Carvalho on 27/12/16.
+ *
  */
 public class AppHttpConnection {
 
@@ -124,7 +125,7 @@ public class AppHttpConnection {
                 URL url = new URL(endPointUrl);
                 URLConnection urlConnection = url.openConnection();
 
-                if (!(urlConnection instanceof HttpsURLConnection)) {
+                if ((urlConnection instanceof HttpsURLConnection)) {
 
                     //SSL TLS CONTEXT - secure socket protocol implementation
                     sslContext = SSLContext.getInstance(PROTOCOL_TLS);
